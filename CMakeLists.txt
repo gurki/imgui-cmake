@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 3.14 FATAL_ERROR )
+cmake_minimum_required( VERSION 3.28 FATAL_ERROR )
 
 project(
     imgui
@@ -15,6 +15,7 @@ add_library( ${PROJECT_NAME} STATIC
     imgui_widgets.cpp
     backends/imgui_impl_glfw.cpp
     backends/imgui_impl_opengl3.cpp
+    imnodes.cpp
 )
 
 add_library( ${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME} )
