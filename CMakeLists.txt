@@ -7,18 +7,24 @@ project(
     LANGUAGES CXX
 )
 
-include( FetchContent )
+set( BUILD_IMNODES ON CACHE BOOL )
 
-FetchContent_Declare( imnodes
-    GIT_REPOSITORY https://github.com/Nelarius/imnodes.git
-    GIT_TAG master
-    EXCLUDE_FROM_ALL
-)
+if ( BUILD_IMNODES )
 
-FetchContent_GetProperties( imnodes )
+    include( FetchContent )
 
-if( NOT imnodes_POPULATED )
-  FetchContent_Populate( imnodes )
+    FetchContent_Declare( imnodes
+        GIT_REPOSITORY https://github.com/Nelarius/imnodes.git
+        GIT_TAG master
+        EXCLUDE_FROM_ALL
+    )
+
+    FetchContent_GetProperties( imnodes )
+
+    if( NOT imnodes_POPULATED )
+    FetchContent_Populate( imnodes )
+    endif()
+
 endif()
 
 add_library( ${PROJECT_NAME} STATIC
@@ -29,7 +35,9 @@ add_library( ${PROJECT_NAME} STATIC
     imgui_widgets.cpp
     backends/imgui_impl_glfw.cpp
     backends/imgui_impl_opengl3.cpp
-    ${imnodes_SOURCE_DIR}/imnodes.cpp
+    if ( BUILD_IMNODES )
+        ${imnodes_SOURCE_DIR}/imnodes.cpp
+    endif()
 )
 
 add_library( ${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME} )
@@ -38,7 +46,9 @@ target_include_directories( ${PROJECT_NAME}
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/>
         ${CMAKE_CURRENT_SOURCE_DIR}/backends>
-        ${imnodes_SOURCE_DIR}/
+        if ( BUILD_IMNODES )
+            ${imnodes_SOURCE_DIR}/
+        endif()
 )
 
 target_link_libraries( ${PROJECT_NAME}
